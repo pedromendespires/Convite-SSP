@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { motion, Variants, useScroll, useSpring, BezierDefinition, AnimatePresence } from "motion/react";
-import { MapPin, Heart, PartyPopper, Sparkles, Flower2, CalendarPlus, ChevronUp, MessageCircle, Share2, Gift, Timer } from "lucide-react";
-import { memo, useState, useEffect, useCallback } from "react";
+import { motion, Variants, useScroll, useSpring, BezierDefinition, AnimatePresence, useMotionValue, useTransform } from "motion/react";
+import { MapPin, Heart, PartyPopper, Sparkles, Flower2, CalendarPlus, ChevronUp, MessageCircle, Share2, Gift, Timer, Wand2 } from "lucide-react";
+import { memo, useState, useEffect, useCallback, useRef } from "react";
 import confetti from "canvas-confetti";
 
 // --- Constants & Variants ---
@@ -65,36 +65,68 @@ const ScrollProgress = () => {
   );
 };
 
-const Background = memo(() => (
-  <div className="fixed inset-0 overflow-hidden pointer-events-none select-none" aria-hidden="true">
-    <motion.div 
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 2.5 }}
-      className="absolute inset-0"
-    >
-      <div className="absolute top-[-20%] left-[-15%] w-[60%] h-[60%] bg-pink-200/25 rounded-full blur-[140px]" />
-      <div className="absolute bottom-[-20%] right-[-15%] w-[60%] h-[60%] bg-rose-200/25 rounded-full blur-[140px]" />
-    </motion.div>
-    
-    {[
-      { pos: "top-8 left-8", rot: -20, delay: 0.6 },
-      { pos: "top-8 right-8", rot: 20, delay: 0.8 },
-      { pos: "bottom-8 left-8", rot: 20, delay: 1.0 },
-      { pos: "bottom-8 right-8", rot: -20, delay: 1.2 }
-    ].map((flower, i) => (
+const Background = memo(() => {
+  const { scrollYProgress } = useScroll();
+  
+  // Create different parallax speeds
+  const y1 = useTransform(scrollYProgress, [0, 1], [0, -100]);
+  const y2 = useTransform(scrollYProgress, [0, 1], [0, -200]);
+  const y3 = useTransform(scrollYProgress, [0, 1], [0, 150]);
+  const rotate1 = useTransform(scrollYProgress, [0, 1], [0, 45]);
+  const rotate2 = useTransform(scrollYProgress, [0, 1], [0, -45]);
+
+  return (
+    <div className="fixed inset-0 overflow-hidden pointer-events-none select-none" aria-hidden="true">
       <motion.div 
-        key={i}
-        initial={{ opacity: 0, scale: 0.7, rotate: flower.rot - 15 }}
-        animate={{ opacity: 1, scale: 1, rotate: flower.rot }}
-        transition={{ duration: 2, delay: flower.delay, ease: EASE_CUSTOM }}
-        className={`absolute ${flower.pos} text-pink-400/25`}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 2.5 }}
+        className="absolute inset-0"
       >
-        <Flower2 size={100} strokeWidth={1} />
+        <div className="absolute top-[-20%] left-[-15%] w-[60%] h-[60%] bg-pink-200/25 rounded-full blur-[140px]" />
+        <div className="absolute bottom-[-20%] right-[-15%] w-[60%] h-[60%] bg-rose-200/25 rounded-full blur-[140px]" />
       </motion.div>
-    ))}
-  </div>
-));
+      
+      {/* Parallax Flowers */}
+      {[
+        { pos: "top-[10%] left-[5%]", rot: -20, delay: 0.6, y: y1, r: rotate1 },
+        { pos: "top-[15%] right-[8%]", rot: 20, delay: 0.8, y: y2, r: rotate2 },
+        { pos: "bottom-[20%] left-[10%]", rot: 15, delay: 1.0, y: y3, r: rotate1 },
+        { pos: "bottom-[15%] right-[5%]", rot: -15, delay: 1.2, y: y1, r: rotate2 }
+      ].map((item, i) => (
+        <motion.div 
+          key={`flower-${i}`}
+          initial={{ opacity: 0, scale: 0.7 }}
+          animate={{ opacity: 1, scale: 1 }}
+          style={{ y: item.y, rotate: item.r }}
+          transition={{ duration: 2, delay: item.delay, ease: EASE_CUSTOM }}
+          className={`absolute ${item.pos} text-pink-400/20`}
+        >
+          <Flower2 size={120} strokeWidth={0.5} />
+        </motion.div>
+      ))}
+
+      {/* Parallax Hearts */}
+      {[
+        { pos: "top-[40%] left-[15%]", delay: 1.4, y: y2, r: rotate2 },
+        { pos: "top-[60%] right-[12%]", delay: 1.6, y: y1, r: rotate1 },
+        { pos: "bottom-[40%] right-[20%]", delay: 1.8, y: y3, r: rotate2 },
+        { pos: "top-[25%] left-[40%]", delay: 2.0, y: y2, r: rotate1 }
+      ].map((item, i) => (
+        <motion.div 
+          key={`heart-${i}`}
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={{ opacity: 1, scale: 1 }}
+          style={{ y: item.y, rotate: item.r }}
+          transition={{ duration: 2, delay: item.delay, ease: EASE_CUSTOM }}
+          className={`absolute ${item.pos} text-rose-300/15`}
+        >
+          <Heart size={80} fill="currentColor" strokeWidth={0} />
+        </motion.div>
+      ))}
+    </div>
+  );
+});
 
 Background.displayName = "Background";
 
@@ -363,6 +395,81 @@ const ScrollToTop = () => {
   );
 };
 
+const MagicCursor = () => {
+  const [particles, setParticles] = useState<{ id: number; x: number; y: number; type: 'star' | 'heart'; color: string }[]>([]);
+  const cursorX = useMotionValue(-100);
+  const cursorY = useMotionValue(-100);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+
+    const handleMouseMove = (e: MouseEvent) => {
+      cursorX.set(e.clientX);
+      cursorY.set(e.clientY);
+
+      if (Math.random() > 0.7) {
+        const id = Date.now() + Math.random();
+        const type = Math.random() > 0.5 ? 'star' : 'heart';
+        const colors = ['#f472b6', '#60a5fa', '#fbbf24', '#ffffff'];
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        
+        setParticles(prev => [...prev.slice(-15), { id, x: e.clientX, y: e.clientY, type, color }]);
+        setTimeout(() => {
+          setParticles(prev => prev.filter(p => p.id !== id));
+        }, 1000);
+      }
+    };
+
+    if (!isMobile) {
+      window.addEventListener('mousemove', handleMouseMove);
+    }
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('resize', checkMobile);
+    };
+  }, [isMobile, cursorX, cursorY]);
+
+  if (isMobile) return null;
+
+  return (
+    <>
+      <style>{`
+        body { cursor: none !important; }
+        a, button { cursor: none !important; }
+      `}</style>
+      <motion.div
+        className="fixed top-0 left-0 pointer-events-none z-[9999] text-brand-accent drop-shadow-lg"
+        style={{ x: cursorX, y: cursorY, translateX: '-20%', translateY: '-80%' }}
+      >
+        <Wand2 size={32} />
+      </motion.div>
+      <AnimatePresence>
+        {particles.map(p => (
+          <motion.div
+            key={p.id}
+            initial={{ opacity: 1, scale: 1, x: p.x, y: p.y }}
+            animate={{ 
+              opacity: 0, 
+              scale: 0, 
+              y: p.y + (Math.random() * 50 + 20),
+              x: p.x + (Math.random() * 40 - 20)
+            }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 1, ease: "easeOut" }}
+            className="fixed top-0 left-0 pointer-events-none z-[9998]"
+            style={{ color: p.color }}
+          >
+            {p.type === 'star' ? <Sparkles size={16} fill="currentColor" /> : <Heart size={14} fill="currentColor" />}
+          </motion.div>
+        ))}
+      </AnimatePresence>
+    </>
+  );
+};
+
 // --- Main App ---
 
 export default function App() {
@@ -371,6 +478,7 @@ export default function App() {
       <ScrollProgress />
       <Background />
       <ScrollToTop />
+      <MagicCursor />
 
       <main className="relative z-10 max-w-4xl mx-auto px-10">
         <motion.div

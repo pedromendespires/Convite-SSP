@@ -4,7 +4,7 @@
  */
 
 import { motion, Variants, useScroll, useSpring, BezierDefinition, AnimatePresence, useMotionValue, useTransform } from "motion/react";
-import { MapPin, Heart, PartyPopper, Sparkles, Flower2, CalendarPlus, ChevronUp, MessageCircle, Share2, Gift, Timer, Wand2, Star, Rainbow, Smile, IceCream, Music, Palette, Ghost, PawPrint, Shield, Zap } from "lucide-react";
+import { MapPin, Heart, PartyPopper, Sparkles, Flower2, CalendarPlus, ChevronUp, MessageCircle, Share2, Gift, Timer, Wand2, Smile, PawPrint, Shield, Zap, Waves } from "lucide-react";
 import { memo, useState, useEffect, useCallback, useRef, ReactNode } from "react";
 import confetti from "canvas-confetti";
 
@@ -109,9 +109,7 @@ const Background = memo(() => {
       {/* Parallax Hearts & Illustrations */}
       {[
         { pos: "top-[40%] left-[15%]", delay: 1.4, y: y2, r: rotate2, icon: <Heart size={80} fill="currentColor" strokeWidth={0} />, color: "text-rose-300/15" },
-        { pos: "top-[60%] right-[12%]", delay: 1.6, y: y1, r: rotate1, icon: <Star size={60} fill="currentColor" strokeWidth={0} />, color: "text-yellow-300/15" },
         { pos: "bottom-[40%] right-[20%]", delay: 1.8, y: y3, r: rotate2, icon: <Heart size={80} fill="currentColor" strokeWidth={0} />, color: "text-rose-300/15" },
-        { pos: "bottom-[10%] left-[30%]", delay: 2.2, y: y1, r: rotate2, icon: <Rainbow size={90} strokeWidth={1} />, color: "text-indigo-300/15" },
         { pos: "top-[75%] left-[5%]", delay: 2.4, y: y2, r: rotate1, icon: <Smile size={50} strokeWidth={1} />, color: "text-pink-300/15" }
       ].map((item, i) => (
         <motion.div 
@@ -387,15 +385,10 @@ const GiftSuggestions = ({ variants }: { variants: Variants }) => (
 
 const SofiaFavorites = ({ variants }: { variants: Variants }) => {
   const favorites = [
-    { icon: <Ghost className="w-10 h-10" />, label: "Stitch", color: "text-blue-500", bg: "bg-blue-50" },
+    { icon: <Waves className="w-10 h-10" />, label: "Stitch", color: "text-blue-500", bg: "bg-blue-50" },
     { icon: <PawPrint className="w-10 h-10" />, label: "Urso Panda", color: "text-slate-800", bg: "bg-slate-100" },
     { icon: <Shield className="w-10 h-10" />, label: "Patrulha Pata", color: "text-red-500", bg: "bg-red-50" },
     { icon: <Zap className="w-10 h-10" />, label: "Pikachu", color: "text-yellow-500", bg: "bg-yellow-50" },
-    { icon: <Rainbow className="w-10 h-10" />, label: "Arco-íris", color: "text-indigo-400", bg: "bg-indigo-50" },
-    { icon: <Music className="w-10 h-10" />, label: "Música", color: "text-purple-400", bg: "bg-purple-50" },
-    { icon: <IceCream className="w-10 h-10" />, label: "Gelados", color: "text-rose-400", bg: "bg-rose-50" },
-    { icon: <Palette className="w-10 h-10" />, label: "Pintar", color: "text-blue-400", bg: "bg-blue-50" },
-    { icon: <Star className="w-10 h-10" />, label: "Estrelas", color: "text-yellow-400", bg: "bg-yellow-50" },
   ];
 
   return (

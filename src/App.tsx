@@ -429,7 +429,7 @@ const RSVP = ({ variants }: { variants: Variants }) => {
     >
       <h3 className="font-serif text-4xl sm:text-6xl text-brand-blue leading-tight">Conto contigo!</h3>
       <p className="text-slate-600 text-lg sm:text-2xl leading-relaxed">
-        Confirma a tua presença, por favor, até ao dia <span className="font-bold text-brand-blue underline decoration-dotted underline-offset-8">26 de Abril</span>.
+        Confirma a tua presença, por favor, até ao dia <span className="font-bold text-brand-blue">26 de Abril</span>.
       </p>
     </motion.section>
   );

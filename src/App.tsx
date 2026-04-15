@@ -248,7 +248,7 @@ const Header = ({ variants }: { variants: Variants }) => {
       <div className="relative inline-block mb-10 group">
         <div className="absolute inset-0 bg-blue-100/50 -skew-x-12 rounded-2xl -z-10 border border-blue-200/40 transition-all group-hover:scale-110 group-hover:rotate-1 duration-700" />
         <MagicTouch>
-          <h1 className="font-serif text-5xl md:text-8xl font-bold px-12 py-6 text-brand-blue drop-shadow-md tracking-tighter">
+          <h1 className="font-serif text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold px-4 sm:px-12 py-6 text-brand-blue drop-shadow-md tracking-tighter leading-tight">
             Sofia Samouco Pires
           </h1>
         </MagicTouch>
@@ -259,15 +259,15 @@ const Header = ({ variants }: { variants: Variants }) => {
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.8, delay: 0.5, ease: EASE_CUSTOM }}
-          className="inline-block px-10 py-4 bg-brand-accent/10 rounded-full border border-brand-accent/20 shadow-sm backdrop-blur-sm"
+          className="inline-block px-6 sm:px-10 py-3 sm:py-4 bg-brand-accent/10 rounded-full border border-brand-accent/20 shadow-sm backdrop-blur-sm"
         >
           <MagicTouch>
-            <h2 className="font-serif text-4xl md:text-6xl text-brand-accent font-bold italic tracking-tight">
+            <h2 className="font-serif text-3xl sm:text-5xl md:text-6xl text-brand-accent font-bold italic tracking-tight">
               Faz 3 anos
             </h2>
           </MagicTouch>
         </motion.div>
-        <p className="text-brand-blue/70 font-medium text-3xl max-w-2xl mx-auto leading-relaxed italic">
+        <p className="text-brand-blue/70 font-medium text-xl sm:text-2xl md:text-3xl max-w-2xl mx-auto leading-relaxed italic px-4">
           "O meu aniversário está a chegar e tu não podes faltar!"
         </p>
       </div>
@@ -290,31 +290,31 @@ const WavyDivider = ({ className = "" }: { className?: string }) => (
 );
 
 const Details = ({ variants }: { variants: Variants }) => (
-  <div className="space-y-12">
+  <div className="space-y-8 sm:space-y-12">
     <WavyDivider />
-    <motion.section variants={variants} className="grid grid-cols-1 md:grid-cols-3 gap-16 items-center py-4">
-      <MagicTouch className="space-y-3">
-        <span className="text-brand-blue/50 font-serif text-3xl italic">Domingo</span>
-        <div className="text-brand-accent font-serif text-7xl font-bold tabular-nums">03</div>
-        <span className="text-brand-blue font-serif text-3xl font-bold tracking-[0.2em] uppercase">Maio</span>
+    <motion.section variants={variants} className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-16 items-center py-4">
+      <MagicTouch className="space-y-2 sm:space-y-3">
+        <span className="text-brand-blue/50 font-serif text-2xl sm:text-3xl italic">Domingo</span>
+        <div className="text-brand-accent font-serif text-6xl sm:text-7xl font-bold tabular-nums">03</div>
+        <span className="text-brand-blue font-serif text-2xl sm:text-3xl font-bold tracking-[0.2em] uppercase">Maio</span>
       </MagicTouch>
 
-      <div className="flex justify-center">
+      <div className="flex justify-center order-first md:order-none">
         <MagicTouch>
           <motion.div 
-            animate={{ scale: [1, 1.15, 1], rotate: [0, 10, -10, 0] }}
+            animate={{ scale: [1, 1.1, 1], rotate: [0, 5, -5, 0] }}
             transition={{ duration: 5, repeat: Infinity }}
-            className="w-48 h-48 flex items-center justify-center bg-white/40 rounded-full backdrop-blur-md border border-white/60 shadow-inner"
+            className="w-32 h-32 sm:w-48 sm:h-48 flex items-center justify-center bg-white/40 rounded-full backdrop-blur-md border border-white/60 shadow-inner"
           >
-            <Sparkles className="w-24 h-24 text-brand-accent/30" />
+            <Sparkles className="w-16 h-16 sm:w-24 sm:h-24 text-brand-accent/30" />
           </motion.div>
         </MagicTouch>
       </div>
 
-      <MagicTouch className="space-y-3">
-        <span className="text-brand-blue/50 font-serif text-3xl italic">às</span>
-        <div className="text-brand-accent font-serif text-7xl font-bold tabular-nums">15:00</div>
-        <span className="text-brand-blue font-serif text-3xl font-bold tracking-[0.2em] uppercase">Horas</span>
+      <MagicTouch className="space-y-2 sm:space-y-3">
+        <span className="text-brand-blue/50 font-serif text-2xl sm:text-3xl italic">às</span>
+        <div className="text-brand-accent font-serif text-6xl sm:text-7xl font-bold tabular-nums">15:00</div>
+        <span className="text-brand-blue font-serif text-2xl sm:text-3xl font-bold tracking-[0.2em] uppercase">Horas</span>
       </MagicTouch>
     </motion.section>
     <WavyDivider className="rotate-180" />
@@ -322,23 +322,23 @@ const Details = ({ variants }: { variants: Variants }) => (
 );
 
 const Location = ({ variants }: { variants: Variants }) => (
-  <motion.section variants={variants} className="space-y-10 py-6">
-    <div className="space-y-3">
-      <h4 className="text-brand-blue font-serif text-5xl font-bold tracking-tight">Local: Condomínio São Julião Terrace</h4>
-      <p className="text-brand-accent font-medium text-2xl italic opacity-70">
+  <motion.section variants={variants} className="space-y-8 sm:space-y-10 py-6">
+    <div className="space-y-3 px-4">
+      <h4 className="text-brand-blue font-serif text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight leading-tight">Local: Condomínio São Julião Terrace</h4>
+      <p className="text-brand-accent font-medium text-xl sm:text-2xl italic opacity-70">
         (Oeiras)
       </p>
     </div>
-    <div className="flex flex-col sm:flex-row justify-center gap-6 pt-4">
+    <div className="flex flex-col lg:flex-row justify-center items-center gap-4 sm:gap-6 pt-4 px-4">
       <motion.a
         href="https://www.google.com/maps/search/?api=1&query=Condomínio+São+Julião+Terrace,+R.+Ernesto+Veiga+de+Oliveira+22,+2780-052+Oeiras,+Portugal"
         target="_blank"
         rel="noopener noreferrer"
         whileHover={{ scale: 1.05, y: -5 }}
         whileTap={{ scale: 0.95 }}
-        className="inline-flex items-center justify-center gap-3 px-12 py-5 bg-brand-blue text-white rounded-full font-bold shadow-xl shadow-brand-blue/20 transition-all"
+        className="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 sm:px-12 py-4 sm:py-5 bg-brand-blue text-white rounded-full font-bold shadow-xl shadow-brand-blue/20 transition-all text-sm sm:text-base"
       >
-        <MapPin className="w-6 h-6" />
+        <MapPin className="w-5 h-5 sm:w-6 sm:h-6" />
         <span>Ver no Mapa</span>
       </motion.a>
       
@@ -354,9 +354,9 @@ const Location = ({ variants }: { variants: Variants }) => (
           };
           window.open(`https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(event.title)}&dates=${event.start}/${event.end}&details=${encodeURIComponent(event.title)}&location=${encodeURIComponent(event.location)}`, '_blank');
         }}
-        className="inline-flex items-center justify-center gap-3 px-12 py-5 bg-white border-2 border-brand-blue/10 text-brand-blue rounded-full font-bold shadow-lg hover:bg-brand-light-blue transition-all"
+        className="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 sm:px-12 py-4 sm:py-5 bg-white border-2 border-brand-blue/10 text-brand-blue rounded-full font-bold shadow-lg hover:bg-brand-light-blue transition-all text-sm sm:text-base"
       >
-        <CalendarPlus className="w-6 h-6" />
+        <CalendarPlus className="w-5 h-5 sm:w-6 sm:h-6" />
         <span>Guardar no Calendário</span>
       </motion.button>
     </div>
@@ -364,20 +364,20 @@ const Location = ({ variants }: { variants: Variants }) => (
 );
 
 const GiftSuggestions = ({ variants }: { variants: Variants }) => (
-  <motion.section variants={variants} className="bg-brand-accent/5 rounded-[4rem] p-12 border-2 border-brand-accent/10 space-y-8">
+  <motion.section variants={variants} className="bg-brand-accent/5 rounded-[2.5rem] sm:rounded-[4rem] p-6 sm:p-12 border-2 border-brand-accent/10 space-y-6 sm:space-y-8">
     <div className="flex items-center justify-center gap-3">
-      <Gift className="text-brand-accent" />
-      <h3 className="font-serif text-4xl text-brand-blue font-bold">Dicas da Sofia</h3>
+      <Gift className="text-brand-accent w-5 h-5 sm:w-6 sm:h-6" />
+      <h3 className="font-serif text-2xl sm:text-4xl text-brand-blue font-bold">Dicas da Sofia</h3>
     </div>
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
       {[
         { title: "Roupa", desc: "Tamanho 3-4 anos" },
         { title: "Calçado", desc: "Tamanho 24-25" },
         { title: "Gostos", desc: "Livros, puzzles e legos" }
       ].map((item, i) => (
-        <div key={i} className="bg-white/60 p-6 rounded-3xl shadow-sm border border-white">
-          <p className="font-bold text-brand-blue text-xl mb-1">{item.title}</p>
-          <p className="text-slate-600">{item.desc}</p>
+        <div key={i} className="bg-white/60 p-4 sm:p-6 rounded-2xl sm:rounded-3xl shadow-sm border border-white">
+          <p className="font-bold text-brand-blue text-lg sm:text-xl mb-1">{item.title}</p>
+          <p className="text-slate-600 text-sm sm:text-base">{item.desc}</p>
         </div>
       ))}
     </div>
@@ -388,10 +388,10 @@ const RSVP = ({ variants }: { variants: Variants }) => {
   return (
     <motion.section 
       variants={variants} 
-      className="bg-white/60 backdrop-blur-xl rounded-[5rem] p-16 border border-white shadow-2xl shadow-brand-blue/10 space-y-10"
+      className="bg-white/60 backdrop-blur-xl rounded-[3rem] sm:rounded-[5rem] p-8 sm:p-16 border border-white shadow-2xl shadow-brand-blue/10 space-y-6 sm:space-y-10"
     >
-      <h3 className="font-serif text-6xl text-brand-blue">Contamos contigo!</h3>
-      <p className="text-slate-600 text-2xl leading-relaxed">
+      <h3 className="font-serif text-4xl sm:text-6xl text-brand-blue leading-tight">Contamos contigo!</h3>
+      <p className="text-slate-600 text-lg sm:text-2xl leading-relaxed">
         Confirma a tua presença, por favor, até ao dia <span className="font-bold text-brand-blue underline decoration-dotted underline-offset-8">26 de Abril</span>.
       </p>
     </motion.section>
@@ -528,7 +528,7 @@ export default function App() {
       <ScrollToTop />
       <MagicCursor />
 
-      <main className="relative z-10 max-w-4xl mx-auto px-10">
+      <main className="relative z-10 w-full max-w-5xl mx-auto px-6 sm:px-10 lg:px-16 py-12">
         <motion.div
           variants={CONTAINER_VARIANTS}
           initial="hidden"

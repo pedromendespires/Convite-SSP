@@ -262,7 +262,7 @@ const Header = ({ variants }: { variants: Variants }) => {
         >
           <MagicTouch>
             <h2 className="font-serif text-3xl sm:text-5xl md:text-6xl text-brand-accent font-bold italic tracking-tight">
-              Faz 3 anos
+              Faço 3 anos
             </h2>
           </MagicTouch>
         </motion.div>
@@ -346,7 +346,7 @@ const Location = ({ variants }: { variants: Variants }) => (
         whileTap={{ scale: 0.95 }}
         onClick={() => {
           const event = {
-            title: "Aniversário Sofia Samouco Pires- 3 Anos",
+            title: "O Meu Aniversário (Sofia) - 3 Anos",
             start: "20260503T150000",
             end: "20260503T190000",
             location: "Condomínio São Julião Terrace, R. Ernesto Veiga de Oliveira 22, 2780-052 Oeiras, Portugal"
@@ -366,7 +366,7 @@ const GiftSuggestions = ({ variants }: { variants: Variants }) => (
   <motion.section variants={variants} className="bg-brand-accent/5 rounded-[2.5rem] sm:rounded-[4rem] p-6 sm:p-12 border-2 border-brand-accent/10 space-y-6 sm:space-y-8">
     <div className="flex items-center justify-center gap-3">
       <Gift className="text-brand-accent w-5 h-5 sm:w-6 sm:h-6" />
-      <h3 className="font-serif text-2xl sm:text-4xl text-brand-blue font-bold">Dicas da Sofia</h3>
+      <h3 className="font-serif text-2xl sm:text-4xl text-brand-blue font-bold">As minhas dicas</h3>
     </div>
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
       {[
@@ -394,8 +394,8 @@ const SofiaFavorites = ({ variants }: { variants: Variants }) => {
   return (
     <motion.section variants={variants} className="space-y-10 py-12">
       <div className="space-y-3">
-        <h3 className="font-serif text-4xl sm:text-5xl text-brand-blue font-bold tracking-tight">As Coisas Favoritas</h3>
-        <p className="text-brand-blue/60 text-lg italic">Pequenas ilustrações do que a Sofia mais gosta</p>
+        <h3 className="font-serif text-4xl sm:text-5xl text-brand-blue font-bold tracking-tight">As Minhas Coisas Favoritas</h3>
+        <p className="text-brand-blue/60 text-lg italic">Pequenas ilustrações do que eu mais gosto</p>
       </div>
       
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6">
@@ -427,7 +427,7 @@ const RSVP = ({ variants }: { variants: Variants }) => {
       variants={variants} 
       className="bg-white/60 backdrop-blur-xl rounded-[3rem] sm:rounded-[5rem] p-8 sm:p-16 border border-white shadow-2xl shadow-brand-blue/10 space-y-6 sm:space-y-10"
     >
-      <h3 className="font-serif text-4xl sm:text-6xl text-brand-blue leading-tight">Contamos contigo!</h3>
+      <h3 className="font-serif text-4xl sm:text-6xl text-brand-blue leading-tight">Conto contigo!</h3>
       <p className="text-slate-600 text-lg sm:text-2xl leading-relaxed">
         Confirma a tua presença, por favor, até ao dia <span className="font-bold text-brand-blue underline decoration-dotted underline-offset-8">26 de Abril</span>.
       </p>

@@ -5,7 +5,7 @@
 
 import { motion, Variants, useScroll, useSpring, BezierDefinition, AnimatePresence, useMotionValue, useTransform } from "motion/react";
 import { MapPin, Heart, PartyPopper, Sparkles, Flower2, CalendarPlus, ChevronUp, MessageCircle, Share2, Gift, Timer, Wand2 } from "lucide-react";
-import { memo, useState, useEffect, useCallback, useRef } from "react";
+import { memo, useState, useEffect, useCallback, useRef, ReactNode } from "react";
 import confetti from "canvas-confetti";
 
 // --- Constants & Variants ---
@@ -186,6 +186,19 @@ const Countdown = ({ variants }: { variants: Variants }) => {
   );
 };
 
+const MagicTouch = ({ children, className = "" }: { children: ReactNode; className?: string }) => (
+  <motion.div
+    whileHover={{ 
+      scale: 1.05,
+      filter: "drop-shadow(0 0 15px rgba(219, 39, 119, 0.4))",
+    }}
+    whileTap={{ scale: 0.95 }}
+    className={`inline-block transition-all duration-300 ${className}`}
+  >
+    {children}
+  </motion.div>
+);
+
 const Header = ({ variants }: { variants: Variants }) => {
   const triggerConfetti = useCallback(() => {
     confetti({
@@ -234,9 +247,11 @@ const Header = ({ variants }: { variants: Variants }) => {
       
       <div className="relative inline-block mb-10 group">
         <div className="absolute inset-0 bg-blue-100/50 -skew-x-12 rounded-2xl -z-10 border border-blue-200/40 transition-all group-hover:scale-110 group-hover:rotate-1 duration-700" />
-        <h1 className="font-serif text-5xl md:text-8xl font-bold px-12 py-6 text-brand-blue drop-shadow-md tracking-tighter">
-          Sofia Samouco Pires
-        </h1>
+        <MagicTouch>
+          <h1 className="font-serif text-5xl md:text-8xl font-bold px-12 py-6 text-brand-blue drop-shadow-md tracking-tighter">
+            Sofia Samouco Pires
+          </h1>
+        </MagicTouch>
       </div>
 
       <div className="space-y-8">
@@ -246,9 +261,11 @@ const Header = ({ variants }: { variants: Variants }) => {
           transition={{ duration: 0.8, delay: 0.5, ease: EASE_CUSTOM }}
           className="inline-block px-10 py-4 bg-brand-accent/10 rounded-full border border-brand-accent/20 shadow-sm backdrop-blur-sm"
         >
-          <h2 className="font-serif text-4xl md:text-6xl text-brand-accent font-bold italic tracking-tight">
-            Faz 3 anos
-          </h2>
+          <MagicTouch>
+            <h2 className="font-serif text-4xl md:text-6xl text-brand-accent font-bold italic tracking-tight">
+              Faz 3 anos
+            </h2>
+          </MagicTouch>
         </motion.div>
         <p className="text-brand-blue/70 font-medium text-3xl max-w-2xl mx-auto leading-relaxed italic">
           "O meu aniversário está a chegar e tu não podes faltar!"
@@ -276,27 +293,29 @@ const Details = ({ variants }: { variants: Variants }) => (
   <div className="space-y-12">
     <WavyDivider />
     <motion.section variants={variants} className="grid grid-cols-1 md:grid-cols-3 gap-16 items-center py-4">
-      <div className="space-y-3">
+      <MagicTouch className="space-y-3">
         <span className="text-brand-blue/50 font-serif text-3xl italic">Domingo</span>
         <div className="text-brand-accent font-serif text-7xl font-bold tabular-nums">03</div>
         <span className="text-brand-blue font-serif text-3xl font-bold tracking-[0.2em] uppercase">Maio</span>
-      </div>
+      </MagicTouch>
 
       <div className="flex justify-center">
-        <motion.div 
-          animate={{ scale: [1, 1.15, 1], rotate: [0, 10, -10, 0] }}
-          transition={{ duration: 5, repeat: Infinity }}
-          className="w-48 h-48 flex items-center justify-center bg-white/40 rounded-full backdrop-blur-md border border-white/60 shadow-inner"
-        >
-          <Sparkles className="w-24 h-24 text-brand-accent/30" />
-        </motion.div>
+        <MagicTouch>
+          <motion.div 
+            animate={{ scale: [1, 1.15, 1], rotate: [0, 10, -10, 0] }}
+            transition={{ duration: 5, repeat: Infinity }}
+            className="w-48 h-48 flex items-center justify-center bg-white/40 rounded-full backdrop-blur-md border border-white/60 shadow-inner"
+          >
+            <Sparkles className="w-24 h-24 text-brand-accent/30" />
+          </motion.div>
+        </MagicTouch>
       </div>
 
-      <div className="space-y-3">
+      <MagicTouch className="space-y-3">
         <span className="text-brand-blue/50 font-serif text-3xl italic">às</span>
         <div className="text-brand-accent font-serif text-7xl font-bold tabular-nums">15:00</div>
         <span className="text-brand-blue font-serif text-3xl font-bold tracking-[0.2em] uppercase">Horas</span>
-      </div>
+      </MagicTouch>
     </motion.section>
     <WavyDivider className="rotate-180" />
   </div>

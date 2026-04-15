@@ -4,7 +4,7 @@
  */
 
 import { motion, Variants, useScroll, useSpring, BezierDefinition, AnimatePresence, useMotionValue, useTransform } from "motion/react";
-import { MapPin, Heart, PartyPopper, Sparkles, Flower2, CalendarPlus, ChevronUp, MessageCircle, Share2, Gift, Timer, Wand2 } from "lucide-react";
+import { MapPin, Heart, PartyPopper, Sparkles, Flower2, CalendarPlus, ChevronUp, MessageCircle, Share2, Gift, Timer, Wand2, Star, Rainbow, Smile, IceCream, Music, Palette, Ghost, PawPrint, Shield, Zap } from "lucide-react";
 import { memo, useState, useEffect, useCallback, useRef, ReactNode } from "react";
 import confetti from "canvas-confetti";
 
@@ -106,22 +106,23 @@ const Background = memo(() => {
         </motion.div>
       ))}
 
-      {/* Parallax Hearts */}
+      {/* Parallax Hearts & Illustrations */}
       {[
-        { pos: "top-[40%] left-[15%]", delay: 1.4, y: y2, r: rotate2 },
-        { pos: "top-[60%] right-[12%]", delay: 1.6, y: y1, r: rotate1 },
-        { pos: "bottom-[40%] right-[20%]", delay: 1.8, y: y3, r: rotate2 },
-        { pos: "top-[25%] left-[40%]", delay: 2.0, y: y2, r: rotate1 }
+        { pos: "top-[40%] left-[15%]", delay: 1.4, y: y2, r: rotate2, icon: <Heart size={80} fill="currentColor" strokeWidth={0} />, color: "text-rose-300/15" },
+        { pos: "top-[60%] right-[12%]", delay: 1.6, y: y1, r: rotate1, icon: <Star size={60} fill="currentColor" strokeWidth={0} />, color: "text-yellow-300/15" },
+        { pos: "bottom-[40%] right-[20%]", delay: 1.8, y: y3, r: rotate2, icon: <Heart size={80} fill="currentColor" strokeWidth={0} />, color: "text-rose-300/15" },
+        { pos: "bottom-[10%] left-[30%]", delay: 2.2, y: y1, r: rotate2, icon: <Rainbow size={90} strokeWidth={1} />, color: "text-indigo-300/15" },
+        { pos: "top-[75%] left-[5%]", delay: 2.4, y: y2, r: rotate1, icon: <Smile size={50} strokeWidth={1} />, color: "text-pink-300/15" }
       ].map((item, i) => (
         <motion.div 
-          key={`heart-${i}`}
+          key={`deco-${i}`}
           initial={{ opacity: 0, scale: 0.5 }}
           animate={{ opacity: 1, scale: 1 }}
           style={{ y: item.y, rotate: item.r }}
           transition={{ duration: 2, delay: item.delay, ease: EASE_CUSTOM }}
-          className={`absolute ${item.pos} text-rose-300/15`}
+          className={`absolute ${item.pos} ${item.color}`}
         >
-          <Heart size={80} fill="currentColor" strokeWidth={0} />
+          {item.icon}
         </motion.div>
       ))}
     </div>
@@ -384,6 +385,49 @@ const GiftSuggestions = ({ variants }: { variants: Variants }) => (
   </motion.section>
 );
 
+const SofiaFavorites = ({ variants }: { variants: Variants }) => {
+  const favorites = [
+    { icon: <Ghost className="w-10 h-10" />, label: "Stitch", color: "text-blue-500", bg: "bg-blue-50" },
+    { icon: <PawPrint className="w-10 h-10" />, label: "Urso Panda", color: "text-slate-800", bg: "bg-slate-100" },
+    { icon: <Shield className="w-10 h-10" />, label: "Patrulha Pata", color: "text-red-500", bg: "bg-red-50" },
+    { icon: <Zap className="w-10 h-10" />, label: "Pikachu", color: "text-yellow-500", bg: "bg-yellow-50" },
+    { icon: <Rainbow className="w-10 h-10" />, label: "Arco-íris", color: "text-indigo-400", bg: "bg-indigo-50" },
+    { icon: <Music className="w-10 h-10" />, label: "Música", color: "text-purple-400", bg: "bg-purple-50" },
+    { icon: <IceCream className="w-10 h-10" />, label: "Gelados", color: "text-rose-400", bg: "bg-rose-50" },
+    { icon: <Palette className="w-10 h-10" />, label: "Pintar", color: "text-blue-400", bg: "bg-blue-50" },
+    { icon: <Star className="w-10 h-10" />, label: "Estrelas", color: "text-yellow-400", bg: "bg-yellow-50" },
+  ];
+
+  return (
+    <motion.section variants={variants} className="space-y-10 py-12">
+      <div className="space-y-3">
+        <h3 className="font-serif text-4xl sm:text-5xl text-brand-blue font-bold tracking-tight">As Coisas Favoritas</h3>
+        <p className="text-brand-blue/60 text-lg italic">Pequenas ilustrações do que a Sofia mais gosta</p>
+      </div>
+      
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6">
+        {favorites.map((fav, i) => (
+          <div key={i}>
+            <MagicTouch>
+              <motion.div
+                whileHover={{ y: -10 }}
+                className={`${fav.bg} p-6 sm:p-8 rounded-[2rem] border border-white shadow-sm flex flex-col items-center gap-4 transition-colors hover:shadow-md`}
+              >
+                <div className={fav.color}>
+                  {fav.icon}
+                </div>
+                <span className="font-bold text-brand-blue/80 text-sm sm:text-base uppercase tracking-wider">
+                  {fav.label}
+                </span>
+              </motion.div>
+            </MagicTouch>
+          </div>
+        ))}
+      </div>
+    </motion.section>
+  );
+};
+
 const RSVP = ({ variants }: { variants: Variants }) => {
   return (
     <motion.section 
@@ -547,6 +591,7 @@ export default function App() {
 
           <Details variants={ITEM_VARIANTS} />
           <Location variants={ITEM_VARIANTS} />
+          <SofiaFavorites variants={ITEM_VARIANTS} />
           <GiftSuggestions variants={ITEM_VARIANTS} />
           <RSVP variants={ITEM_VARIANTS} />
           <Footer variants={ITEM_VARIANTS} />

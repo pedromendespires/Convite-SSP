@@ -1,0 +1,402 @@
+/**
+ * @license
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import { motion, Variants, useScroll, useSpring, BezierDefinition, AnimatePresence } from "motion/react";
+import { MapPin, Heart, PartyPopper, Sparkles, Flower2, CalendarPlus, ChevronUp, MessageCircle, Share2, Gift, Timer } from "lucide-react";
+import { memo, useState, useEffect, useCallback } from "react";
+import confetti from "canvas-confetti";
+
+// --- Constants & Variants ---
+
+const EASE_CUSTOM: BezierDefinition = [0.22, 1, 0.36, 1];
+
+const CONTAINER_VARIANTS: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.15,
+      delayChildren: 0.1,
+    },
+  },
+};
+
+const ITEM_VARIANTS: Variants = {
+  hidden: { y: 40, opacity: 0 },
+  visible: {
+    y: 0,
+    opacity: 1,
+    transition: {
+      duration: 1.2,
+      ease: EASE_CUSTOM,
+    },
+  },
+};
+
+const FLOATING_VARIANTS: Variants = {
+  animate: (i: number) => ({
+    y: [0, -15, 0],
+    transition: {
+      repeat: Infinity,
+      duration: 3 + i * 0.8,
+      ease: "easeInOut",
+      delay: i * 0.4,
+    },
+  }),
+};
+
+// --- Sub-components ---
+
+const ScrollProgress = () => {
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  });
+
+  return (
+    <motion.div
+      className="fixed top-0 left-0 right-0 h-1.5 bg-brand-blue z-50 origin-left"
+      style={{ scaleX }}
+    />
+  );
+};
+
+const Background = memo(() => (
+  <div className="fixed inset-0 overflow-hidden pointer-events-none select-none" aria-hidden="true">
+    <motion.div 
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 2.5 }}
+      className="absolute inset-0"
+    >
+      <div className="absolute top-[-20%] left-[-15%] w-[60%] h-[60%] bg-pink-200/25 rounded-full blur-[140px]" />
+      <div className="absolute bottom-[-20%] right-[-15%] w-[60%] h-[60%] bg-rose-200/25 rounded-full blur-[140px]" />
+    </motion.div>
+    
+    {[
+      { pos: "top-8 left-8", rot: -20, delay: 0.6 },
+      { pos: "top-8 right-8", rot: 20, delay: 0.8 },
+      { pos: "bottom-8 left-8", rot: 20, delay: 1.0 },
+      { pos: "bottom-8 right-8", rot: -20, delay: 1.2 }
+    ].map((flower, i) => (
+      <motion.div 
+        key={i}
+        initial={{ opacity: 0, scale: 0.7, rotate: flower.rot - 15 }}
+        animate={{ opacity: 1, scale: 1, rotate: flower.rot }}
+        transition={{ duration: 2, delay: flower.delay, ease: EASE_CUSTOM }}
+        className={`absolute ${flower.pos} text-pink-400/25`}
+      >
+        <Flower2 size={100} strokeWidth={1} />
+      </motion.div>
+    ))}
+  </div>
+));
+
+Background.displayName = "Background";
+
+const Countdown = ({ variants }: { variants: Variants }) => {
+  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+
+  useEffect(() => {
+    const target = new Date("2026-05-03T15:00:00").getTime();
+    const interval = setInterval(() => {
+      const now = new Date().getTime();
+      const diff = target - now;
+      if (diff <= 0) {
+        clearInterval(interval);
+        return;
+      }
+      setTimeLeft({
+        days: Math.floor(diff / (1000 * 60 * 60 * 24)),
+        hours: Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+        minutes: Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)),
+        seconds: Math.floor((diff % (1000 * 60)) / 1000),
+      });
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <motion.div variants={variants} className="flex justify-center gap-4 md:gap-8 py-4">
+      {[
+        { label: "Dias", value: timeLeft.days },
+        { label: "Horas", value: timeLeft.hours },
+        { label: "Minutos", value: timeLeft.minutes },
+        { label: "Segundos", value: timeLeft.seconds },
+      ].map((item, i) => (
+        <div key={i} className="flex flex-col items-center">
+          <div className="bg-white/60 backdrop-blur-sm w-16 h-16 md:w-20 md:h-20 rounded-2xl flex items-center justify-center shadow-lg border border-white">
+            <span className="text-2xl md:text-3xl font-bold text-brand-blue tabular-nums">{item.value}</span>
+          </div>
+          <span className="text-xs md:text-sm font-bold text-brand-accent mt-2 uppercase tracking-widest">{item.label}</span>
+        </div>
+      ))}
+    </motion.div>
+  );
+};
+
+const Header = ({ variants }: { variants: Variants }) => {
+  const triggerConfetti = useCallback(() => {
+    confetti({
+      particleCount: 150,
+      spread: 70,
+      origin: { y: 0.6 },
+      colors: ["#db2777", "#f472b6", "#fff1f2", "#60a5fa"]
+    });
+  }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(triggerConfetti, 1500);
+    return () => clearTimeout(timer);
+  }, [triggerConfetti]);
+
+  return (
+    <motion.section variants={variants} className="relative pt-20">
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 flex gap-8">
+        {[
+          { color: "text-brand-blue", size: 24 },
+          { color: "text-brand-accent", size: 32 },
+          { color: "text-brand-blue", size: 24 }
+        ].map((heart, i) => (
+          <motion.div 
+            key={i}
+            custom={i}
+            variants={FLOATING_VARIANTS}
+            animate="animate"
+            className={heart.color}
+          >
+            <Heart fill="currentColor" size={heart.size} />
+          </motion.div>
+        ))}
+      </div>
+
+      <div className="flex justify-center mb-12">
+        <motion.button
+          whileHover={{ scale: 1.1, rotate: 5 }}
+          whileTap={{ scale: 0.9 }}
+          onClick={triggerConfetti}
+          className="bg-white p-12 rounded-full shadow-2xl shadow-brand-blue/10 border border-brand-blue/5 cursor-pointer"
+        >
+          <PartyPopper className="w-24 h-24 text-brand-blue" aria-hidden="true" />
+        </motion.button>
+      </div>
+      
+      <div className="relative inline-block mb-10 group">
+        <div className="absolute inset-0 bg-blue-100/50 -skew-x-12 rounded-2xl -z-10 border border-blue-200/40 transition-all group-hover:scale-110 group-hover:rotate-1 duration-700" />
+        <h1 className="font-serif text-5xl md:text-8xl font-bold px-12 py-6 text-brand-blue drop-shadow-md tracking-tighter">
+          Sofia Samouco Pires
+        </h1>
+      </div>
+
+      <div className="space-y-8">
+        <motion.div
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.8, delay: 0.5, ease: EASE_CUSTOM }}
+          className="inline-block px-10 py-4 bg-brand-accent/10 rounded-full border border-brand-accent/20 shadow-sm backdrop-blur-sm"
+        >
+          <h2 className="font-serif text-4xl md:text-6xl text-brand-accent font-bold italic tracking-tight">
+            Faz 3 anos
+          </h2>
+        </motion.div>
+        <p className="text-brand-blue/70 font-medium text-3xl max-w-2xl mx-auto leading-relaxed italic">
+          "O meu aniversário está a chegar e tu não podes faltar!"
+        </p>
+      </div>
+    </motion.section>
+  );
+};
+
+const Details = ({ variants }: { variants: Variants }) => (
+  <div className="space-y-16">
+    <div className="border-t-2 border-dotted border-brand-blue/15 w-full" />
+    <motion.section variants={variants} className="grid grid-cols-1 md:grid-cols-3 gap-16 items-center py-8">
+      <div className="space-y-3">
+        <span className="text-brand-blue/50 font-serif text-3xl italic">Domingo</span>
+        <div className="text-brand-accent font-serif text-7xl font-bold tabular-nums">03</div>
+        <span className="text-brand-blue font-serif text-3xl font-bold tracking-[0.2em] uppercase">Maio</span>
+      </div>
+
+      <div className="flex justify-center">
+        <motion.div 
+          animate={{ scale: [1, 1.15, 1], rotate: [0, 10, -10, 0] }}
+          transition={{ duration: 5, repeat: Infinity }}
+          className="w-48 h-48 flex items-center justify-center bg-white/40 rounded-full backdrop-blur-md border border-white/60 shadow-inner"
+        >
+          <Sparkles className="w-24 h-24 text-brand-accent/30" />
+        </motion.div>
+      </div>
+
+      <div className="space-y-3">
+        <span className="text-brand-blue/50 font-serif text-3xl italic">às</span>
+        <div className="text-brand-accent font-serif text-7xl font-bold tabular-nums">15:00</div>
+        <span className="text-brand-blue font-serif text-3xl font-bold tracking-[0.2em] uppercase">Horas</span>
+      </div>
+    </motion.section>
+    <div className="border-t-2 border-dotted border-brand-blue/15 w-full" />
+  </div>
+);
+
+const Location = ({ variants }: { variants: Variants }) => (
+  <motion.section variants={variants} className="space-y-10 py-6">
+    <div className="space-y-3">
+      <h4 className="text-brand-blue font-serif text-5xl font-bold tracking-tight">Local: Condomínio São Julião Terrace</h4>
+      <p className="text-brand-accent font-medium text-2xl italic opacity-70">
+        (Oeiras)
+      </p>
+    </div>
+    <div className="flex flex-col sm:flex-row justify-center gap-6 pt-4">
+      <motion.a
+        href="https://www.google.com/maps/search/?api=1&query=Condomínio+São+Julião+Terrace,+R.+Ernesto+Veiga+de+Oliveira+22,+2780-052+Oeiras,+Portugal"
+        target="_blank"
+        rel="noopener noreferrer"
+        whileHover={{ scale: 1.05, y: -5 }}
+        whileTap={{ scale: 0.95 }}
+        className="inline-flex items-center justify-center gap-3 px-12 py-5 bg-brand-blue text-white rounded-full font-bold shadow-xl shadow-brand-blue/20 transition-all"
+      >
+        <MapPin className="w-6 h-6" />
+        <span>Ver no Mapa</span>
+      </motion.a>
+      
+      <motion.button
+        whileHover={{ scale: 1.05, y: -5 }}
+        whileTap={{ scale: 0.95 }}
+        onClick={() => {
+          const event = {
+            title: "Aniversário Sofia Samouco Pires- 3 Anos",
+            start: "20260503T150000",
+            end: "20260503T190000",
+            location: "Condomínio São Julião Terrace, R. Ernesto Veiga de Oliveira 22, 2780-052 Oeiras, Portugal"
+          };
+          window.open(`https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(event.title)}&dates=${event.start}/${event.end}&details=${encodeURIComponent(event.title)}&location=${encodeURIComponent(event.location)}`, '_blank');
+        }}
+        className="inline-flex items-center justify-center gap-3 px-12 py-5 bg-white border-2 border-brand-blue/10 text-brand-blue rounded-full font-bold shadow-lg hover:bg-brand-light-blue transition-all"
+      >
+        <CalendarPlus className="w-6 h-6" />
+        <span>Guardar no Calendário</span>
+      </motion.button>
+    </div>
+  </motion.section>
+);
+
+const GiftSuggestions = ({ variants }: { variants: Variants }) => (
+  <motion.section variants={variants} className="bg-brand-accent/5 rounded-[4rem] p-12 border-2 border-brand-accent/10 space-y-8">
+    <div className="flex items-center justify-center gap-3">
+      <Gift className="text-brand-accent" />
+      <h3 className="font-serif text-4xl text-brand-blue font-bold">Dicas da Sofia</h3>
+    </div>
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {[
+        { title: "Roupa", desc: "Tamanho 3-4 anos" },
+        { title: "Calçado", desc: "Tamanho 24-25" },
+        { title: "Gostos", desc: "Livros, puzzles e legos" }
+      ].map((item, i) => (
+        <div key={i} className="bg-white/60 p-6 rounded-3xl shadow-sm border border-white">
+          <p className="font-bold text-brand-blue text-xl mb-1">{item.title}</p>
+          <p className="text-slate-600">{item.desc}</p>
+        </div>
+      ))}
+    </div>
+  </motion.section>
+);
+
+const RSVP = ({ variants }: { variants: Variants }) => {
+  return (
+    <motion.section 
+      variants={variants} 
+      className="bg-white/60 backdrop-blur-xl rounded-[5rem] p-16 border border-white shadow-2xl shadow-brand-blue/10 space-y-10"
+    >
+      <h3 className="font-serif text-6xl text-brand-blue">Contamos contigo!</h3>
+      <p className="text-slate-600 text-2xl leading-relaxed">
+        Confirma a tua presença, por favor, até ao dia <span className="font-bold text-brand-blue underline decoration-dotted underline-offset-8">26 de Abril</span>.
+      </p>
+    </motion.section>
+  );
+};
+
+const Footer = ({ variants }: { variants: Variants }) => {
+  return (
+    <motion.footer variants={variants} className="pt-16 pb-24 space-y-10">
+      <div className="space-y-4">
+        <div className="flex justify-center gap-4 opacity-30">
+          <Sparkles size={20} />
+          <Heart size={20} fill="currentColor" />
+          <Sparkles size={20} />
+        </div>
+        <p className="font-serif text-4xl text-brand-blue/90 italic tracking-tight">
+          Com amor, Família Samouco Pires
+        </p>
+      </div>
+    </motion.footer>
+  );
+};
+
+const ScrollToTop = () => {
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const toggleVisibility = () => {
+      if (window.pageYOffset > 300) {
+        setIsVisible(true);
+      } else {
+        setIsVisible(false);
+      }
+    };
+    window.addEventListener("scroll", toggleVisibility);
+    return () => window.removeEventListener("scroll", toggleVisibility);
+  }, []);
+
+  return (
+    <motion.button
+      initial={{ opacity: 0, scale: 0.5 }}
+      animate={{ opacity: isVisible ? 1 : 0, scale: isVisible ? 1 : 0.5 }}
+      onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+      className="fixed bottom-8 right-8 p-4 bg-brand-blue text-white rounded-full shadow-2xl z-50 hover:bg-brand-blue/90 transition-colors"
+      aria-label="Voltar ao topo"
+    >
+      <ChevronUp size={24} />
+    </motion.button>
+  );
+};
+
+// --- Main App ---
+
+export default function App() {
+  return (
+    <div className="min-h-screen bg-brand-warm selection:bg-brand-blue/30 overflow-x-hidden antialiased text-slate-900">
+      <ScrollProgress />
+      <Background />
+      <ScrollToTop />
+
+      <main className="relative z-10 max-w-4xl mx-auto px-10">
+        <motion.div
+          variants={CONTAINER_VARIANTS}
+          initial="hidden"
+          animate="visible"
+          className="space-y-24 text-center"
+        >
+          <Header variants={ITEM_VARIANTS} />
+          
+          <div className="space-y-6">
+            <div className="flex items-center justify-center gap-3">
+              <Timer className="text-brand-accent" />
+              <h3 className="font-serif text-3xl text-brand-blue font-bold italic">A contagem decrescente começou!</h3>
+            </div>
+            <Countdown variants={ITEM_VARIANTS} />
+          </div>
+
+          <Details variants={ITEM_VARIANTS} />
+          <Location variants={ITEM_VARIANTS} />
+          <GiftSuggestions variants={ITEM_VARIANTS} />
+          <RSVP variants={ITEM_VARIANTS} />
+          <Footer variants={ITEM_VARIANTS} />
+        </motion.div>
+      </main>
+    </div>
+  );
+}
+
